@@ -1,22 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 import AlbumList from "./AlbumList";
 import UserList from "./UserList";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState({});
+  const originalTitle = document.title;
+  const emptyState = {
+    users: [],
+    currentUser: {},
+    albums: {},
+  };
+  const [allData, setAllData] = useState({ ...emptyState });
 
-  // Load data from https://jsonplaceholder.typicode.com/albums?userId=${user.id}
+  useEffect(() => {
+    const originalTitle = document.title;
+    document.title = "Awesome Album App";
+    return () => document.title = originalTitle;
+  }, [])
+
+  // Load data from https://jsonplaceholder.typicode.com/todos?userId=3
 
   return (
     <div className="App">
       <div className="left column">
-        <UserList users={users} setCurrentUser={setCurrentUser} />
+        <UserList
+          allData={allData}
+          setAllData={setAllData}
+          originalTitle={originalTitle}
+        />
       </div>
       <div className="right column">
-        <AlbumList user={currentUser} />
+        <AlbumList allData={allData} setAllData={setAllData} />
       </div>
     </div>
   );
